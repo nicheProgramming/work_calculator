@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Day Calculator</title>
+<script>
+var d = new Date();
+var date = (d.getMonth() + 1) + "/" + (d.getDate()) + "/" + d.getFullYear();                
+var ddate = (d.getMonth() + 1) + "/" + (d.getDate() + 1) + "/" + d.getFullYear();
+
+window.onload = function () {
+    document.getElementById("fDate").value = date;
+    document.getElementById("eDate").value = ddate;
+};  
+
+Date.prototype.addDays = function(days) {
+    var dat = new Date(this.valueOf())
+    dat.setDate(dat.getDate() + days);
+    return dat;
+}
+
+function getDates(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push( new Date (currentDate) )
+        currentDate = currentDate.addDays(1);
+    }
+    return dateArray;
+}
+
+function calculate() {
+    date = new Date(document.getElementById("fDate").value);
+    ddate = new Date(document.getElementById("eDate").value);
+    if (ddate - date <= 0) {
+        alert("Error");
+        console.log("Error");
+    } else {
+        var i;
+        var cycles = 0;
+        var range = getDates(date, ddate);
+        var len = range.length;
+        console.log("Range Length : " + range.length);
+        console.log("Input : " + date + " , " + ddate);
+        for(i = 0; i <= len; i++) {
+            console.log(range[i]);
+            if(!range[i]) {
+                console.log(len);
+                alert("You have " + len + " day(s) to work");
+                return;
+            }
+            else if(range[i].getDay() == 0) {
+                console.log("Sunday at i " + i);
+                range.splice(i, 1);
+                i -= 1;
+                len = range.length;
+                console.log("Len : " + len);
+            }
+            else if(range[i].getDay() == 1) {
+                console.log("Monday at i " + i);
+                range.splice(i, 1);
+                i -= 1;
+                len = range.length;
+                console.log("Len : " + len);
+            }
+            else if(range[i].getDay() == 6) {
+                console.log("Saturday at i" + i);
+                range.splice(i, 1);
+                i -= 1;
+                len = range.length;
+                console.log("Len : " + len);
+            }
+            cycles += 1;
+            console.log("Cycle " + (cycles) + " complete");
+        }
+    }
+}
+</script>
+</head>
+
+<body>
+First Date: <input id = "fDate" type = "text"/><br>
+Second Date: <input id = "eDate" type = "text"/>
+<button onclick="calculate()">Calculate</button>
+</body>
+</html>
